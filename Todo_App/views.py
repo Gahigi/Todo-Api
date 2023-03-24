@@ -23,6 +23,14 @@ class ViewTodo(APIView):
         todo = Todo.objects.get(id = id)
         serializers_data = TodoSerializer(todo)
         return Response(serializers_data.data, status= status.HTTP_200_OK)
-    def post(self, request, id):
+    def put(self, request, id):
         todo = Todo.objects.get(id = id)
-        serializers_data = TodoSerializer()    
+        serializers_data = TodoSerializer(todo, data= request.data)
+        if serializers_data.is_valid():
+            serializers_data.save()
+            return Response(serializers_data.data, status= status.HTTP_201_CREATED)
+        return Response(serializers_data.errors, status= status.HTTP_400_BAD_REQUEST)
+    def delete(self, request, id):
+        todo = Todo.objects.get(id = id)
+        todo.delete()
+        return Response({"Status": "Deleted"})    
