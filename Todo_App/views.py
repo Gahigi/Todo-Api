@@ -13,7 +13,7 @@ class ViewAllTodo(APIView):
         serializers_data = TodoSerializer(todo, many= True)
         return Response(serializers_data.data, status= status.HTTP_200_OK)
     def put(self, request):
-        serializers_data = TodoSerializer(data= data.request)
+        serializers_data = TodoSerializer(data=request.data)
         if serializers_data.is_valid():
             serializers_data.save()
             return Response(serializers_data.data, status= status.HTTP_201_CREATED)
