@@ -5,9 +5,12 @@ from .serializers import *
 from rest_framework.response import Response
 from django.http import JsonResponse
 from rest_framework import status
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
+from rest_framework.decorators import permission_classes
 
 # Create your views here.
 class ViewAllTodo(APIView):
+    permission_classes = [IsAdminUser]
     def get(self, request):
         todo = Todo.objects.all()
         serializers_data = TodoSerializer(todo, many= True)
@@ -19,6 +22,7 @@ class ViewAllTodo(APIView):
             return Response(serializers_data.data, status= status.HTTP_201_CREATED)
         return Response(serializers_data.errors, status= status.HTTP_400_BAD_REQUEST)
 class ViewTodo(APIView):
+    permission_classes = [IsAdminUser]
     def get(self, request, id):
         todo = Todo.objects.get(id = id)
         serializers_data = TodoSerializer(todo)
